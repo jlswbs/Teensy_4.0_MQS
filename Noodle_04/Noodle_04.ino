@@ -36,12 +36,12 @@ AudioConnection          patchCord5(sine_fm, 0, multiply, 1);
 AudioConnection          patchCord6(multiply, envelope1);
 AudioConnection          patchCord7(envelope2, 0, mixer1, 2);
 AudioConnection          patchCord8(envelope1, 0, mixer1, 0);
-AudioConnection          patchCord9(mixer2, 0, out, 0);
 AudioConnection          patchCord10(mixer1, delay1);
 AudioConnection          patchCord11(delay1, 0, mixer1, 1);
 AudioConnection          patchCord12(gen, 0, filter, 0);
 AudioConnection          patchCord13(lfo, 0, filter, 1);
 AudioConnection          patchCord14(mixer1, 0, mixer2, 0);
+AudioConnection          patchCord15(mixer2, 0, out, 0);
 
 bool d, d2 = true;
 
@@ -49,18 +49,17 @@ int cnt = 0;
 
 void setup() {
   
-  AudioMemory(50);
+  AudioMemory(250);
 
-  mixer1.gain(0,0.6);
-  mixer1.gain(1,0.8);
-  mixer1.gain(2,0.6);
+  mixer1.gain(0, 0.6);
+  mixer1.gain(1, 0.8);
+  mixer1.gain(2, 0.6);
   
-  mixer2.gain(0,0.7);
-  mixer2.gain(1,0.9);
-  mixer2.gain(2,0.3);
+  mixer2.gain(0, 0.7);
+  mixer2.gain(1, 0.9);
+  mixer2.gain(2, 0.3);
   
   sine.amplitude(1.0);
-  
   sine_fm.amplitude(1.0);
   
   delay1.delay(0, 100);
@@ -72,17 +71,17 @@ void setup() {
   
   envelope2.attack(0.5);
   envelope2.decay(1);
-  envelope2.sustain(1);
-  envelope2.release(1);
+  envelope2.sustain(10);
+  envelope2.release(10);
   
   pink.amplitude(1.0);
   
   gen.begin(1.0, 1.0, WAVEFORM_SAMPLE_HOLD);
-  lfo.begin(1.0, 1.0, WAVEFORM_SAMPLE_HOLD); 
+  lfo.begin(0.5, 1.0, WAVEFORM_SAMPLE_HOLD); 
   
-  filter.resonance(2);
+  filter.resonance(4);
   filter.frequency(440);
-  filter.octaveControl(1);
+  filter.octaveControl(2);
   
 }
 
@@ -91,16 +90,16 @@ void loop() {
   if (d == true) {
 
     kick.play(AudioSampleSnare);
-    gen.frequency(rand()%2200);
-    delay1.delay(0, 5 + rand()%95);
+    gen.frequency(rand() % 2200);
+    delay1.delay(0, 1 + rand()%499);
 
   }
   
-  sine.frequency(110 + rand()%880);
+  sine.frequency(110 + rand() % 880);
+  sine_fm.frequency(rand() % 4400);
+  filter.frequency(rand() % 440);
   
-  sine_fm.frequency(rand()%4400);
-  
-  if (cnt == 4) {
+  if (cnt == 2+d2) {
     
     if (d2 == true) kick.play(AudioSampleHihat);
     else kick.play(AudioSampleKick);
